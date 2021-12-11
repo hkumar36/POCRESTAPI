@@ -3,9 +3,12 @@ package com.poc.restAPI.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.poc.restAPI.controller.ProductController;
 import com.poc.restAPI.dto.ProductDTO;
 import com.poc.restAPI.entity.Product;
 import com.poc.restAPI.exception.EmptyInputException;
@@ -21,12 +24,15 @@ import static com.poc.restAPI.mapper.EntityToDTOMapper.dtoToEntityMapper;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+	Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
 	@Autowired
 	ProductRepository productRepo;
 
 	// Purpose : To get all products object from Database
 	@Override
 	public List<ProductDTO> getAllProducts() {
+		logger.info("Inside method : getAllProducts()");
 		try {
 			List<Product> productList = productRepo.findAll();
 			List<ProductDTO> productDTOList = productList.stream().map(e -> entityToDTOMapper(e))
@@ -40,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 	// Purpose : To retrieve Products based on brands
 	@Override
 	public List<ProductDTO> getProductByBrand(List<String> brands) {
-		// TODO Auto-generated method stub
+		logger.info("Inside method : getProductByBrand()");
 		try {
 			validateInput(brands);
 			List<Product> productList = productRepo.findProductByBrands(brands);
@@ -57,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
 	// Purpose : To retrieve Products based on price
 	@Override
 	public List<ProductDTO> getProductByPrice(List<Long> priceList) {
+		logger.info("Inside method : getProductByPrice()");
 		try {
 			validateInput(priceList);
 			List<Product> productList = productRepo.findProductByPrice(priceList);
@@ -73,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
 	// Purpose : To add new Product
 	@Override
 	public ProductDTO addProduct(ProductDTO productDTO) {
-		// TODO Auto-generated method stub
+		logger.info("Inside method : addProduct()");
 		try {
 			validateInput(productDTO);
 			Product product = dtoToEntityMapper(productDTO);
@@ -90,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 	// Purpose : To edit existing Product
 	@Override
 	public ProductDTO editProduct(ProductDTO productDTO) {
-		// TODO Auto-generated method stub
+		logger.info("Inside method : editProduct()");
 		try {
 			validateInput(productDTO);
 			Product product = dtoToEntityMapper(productDTO);
@@ -107,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 	// Purpose : To delete Product
 	@Override
 	public long deleteProductById(long id) {
-		// TODO Auto-generated method stub
+		logger.info("Inside method : deleteProductById()");
 		try {
 			validateInput(id);
 			productRepo.deleteById(id);
